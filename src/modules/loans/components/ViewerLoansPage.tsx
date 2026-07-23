@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { useClientsList } from "@/modules/clients/hooks/useClientsList";
 import { ErrorState } from "@/shared/components/ErrorState";
+import { useCurrency } from "@/shared/currency";
 import { useDateRangeFilter } from "@/shared/date-range";
 
 import { AllLoansFilters } from "../all/components/AllLoansFilters";
@@ -19,17 +20,19 @@ import { useLoansListInfinite } from "../hooks/useLoansListInfinite";
  */
 export function ViewerLoansPage() {
   const { t } = useTranslation();
-  const dateRange = useDateRangeFilter("1m");
+  const { currency } = useCurrency();
+  const dateRange = useDateRangeFilter("1m", { direction: "future" });
   const [selectedClientId, setSelectedClientId] = useState("");
   const { data: clients = [], isLoading: isLoadingClients } = useClientsList();
 
   const filters = useMemo(
     () => ({
+      currency,
       clientId: selectedClientId || undefined,
       nextPaymentDateFrom: dateRange.from,
       nextPaymentDateTo: dateRange.to,
     }),
-    [selectedClientId, dateRange.from, dateRange.to],
+    [currency, selectedClientId, dateRange.from, dateRange.to],
   );
 
   const {

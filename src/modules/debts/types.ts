@@ -24,6 +24,7 @@ export type DebtsOverview = {
 };
 
 export type DebtsListParams = {
+  currency?: string;
   lender?: string;
   nextPaymentDateFrom: string;
   nextPaymentDateTo: string;

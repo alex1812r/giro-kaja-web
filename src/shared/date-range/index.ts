@@ -7,6 +7,7 @@ export {
 } from "./dateRangeUtils";
 export type {
   DateRange,
+  DateRangeDirection,
   DateRangeFilterState,
   DateRangePreset,
 } from "./types";

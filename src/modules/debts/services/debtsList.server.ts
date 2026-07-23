@@ -1,5 +1,6 @@
 import { ApiError } from "@/lib/api/apiError";
 import { createRouteSupabaseClient } from "@/lib/supabase/route-client";
+import { isCurrencyCode, type CurrencyCode } from "@/shared/currency";
 
 import type {
   DebtListItem,
@@ -49,6 +50,9 @@ function parsePageSize(value: number | undefined): number {
 export async function getDebtsList(
   params: DebtsListParams,
 ): Promise<DebtsListPage> {
+  const currency: CurrencyCode = isCurrencyCode(params.currency ?? "")
+    ? (params.currency as CurrencyCode)
+    : "USD";
   const page = parsePage(params.page);
   const pageSize = parsePageSize(params.pageSize);
   const from = page * pageSize;
@@ -68,6 +72,7 @@ export async function getDebtsList(
     .select(
       "id, lender, current_principal, interest_rate, currency, next_payment_date, status",
     )
+    .eq("currency", currency)
     .gte("next_payment_date", params.nextPaymentDateFrom)
     .lte("next_payment_date", params.nextPaymentDateTo)
     .order("next_payment_date", { ascending: true })
@@ -91,7 +96,7 @@ export async function getDebtsList(
     interestRate: asNumber(debt.interest_rate),
     currentPrincipal: asNumber(debt.current_principal),
     status: asDebtStatus(debt.status),
-    currency: debt.currency ?? "USD",
+    currency: debt.currency ?? currency,
   }));
 
   return {

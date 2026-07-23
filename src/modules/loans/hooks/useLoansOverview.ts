@@ -11,6 +11,7 @@ export const loansQueryKeys = {
   overview: (currency: string) =>
     [...loansQueryKeys.all, "overview", currency] as const,
   list: (filters: {
+    currency: string;
     clientId?: string;
     nextPaymentDateFrom: string;
     nextPaymentDateTo: string;

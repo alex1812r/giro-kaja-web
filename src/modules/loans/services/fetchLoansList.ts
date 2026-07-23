@@ -5,6 +5,7 @@ import type { LoansListPage, LoansListParams } from "../types";
 export function fetchLoansList(params: LoansListParams) {
   return apiFetch<LoansListPage>("/api/loans/list", {
     query: {
+      currency: params.currency,
       clientId: params.clientId,
       nextPaymentDateFrom: params.nextPaymentDateFrom,
       nextPaymentDateTo: params.nextPaymentDateTo,

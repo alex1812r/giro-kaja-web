@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { useSessionOrganization } from "@/modules/auth/hooks";
 import { useClientsList } from "@/modules/clients/hooks/useClientsList";
 import { ErrorState } from "@/shared/components/ErrorState";
+import { useCurrency } from "@/shared/currency";
 import { useDateRangeFilter } from "@/shared/date-range";
 
 import { ViewerLoansPage } from "../components/ViewerLoansPage";
@@ -19,26 +20,20 @@ import { AllLoansPageSkeleton } from "./components/AllLoansPageSkeleton";
 
 export function AllLoansPage() {
   const { t } = useTranslation();
+  const { currency } = useCurrency();
   const { isViewer, isLoading: isSessionLoading } = useSessionOrganization();
-  const dateRange = useDateRangeFilter("1m");
+  const dateRange = useDateRangeFilter("1m", { direction: "future" });
   const [selectedClientId, setSelectedClientId] = useState("");
   const { data: clients = [], isLoading: isLoadingClients } = useClientsList();
 
-  if (isSessionLoading) {
-    return <AllLoansPageSkeleton />;
-  }
-
-  if (isViewer) {
-    return <ViewerLoansPage />;
-  }
-
   const filters = useMemo(
     () => ({
+      currency,
       clientId: selectedClientId || undefined,
       nextPaymentDateFrom: dateRange.from,
       nextPaymentDateTo: dateRange.to,
     }),
-    [selectedClientId, dateRange.from, dateRange.to],
+    [currency, selectedClientId, dateRange.from, dateRange.to],
   );
 
   const {
@@ -51,7 +46,9 @@ export function AllLoansPage() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useLoansListInfinite(filters);
+  } = useLoansListInfinite(filters, {
+    enabled: !isSessionLoading && !isViewer,
+  });
 
   const items = useMemo(
     () => data?.pages.flatMap((page) => page.items) ?? [],
@@ -60,8 +57,12 @@ export function AllLoansPage() {
 
   const isListLoading = isLoading || (isFetching && !isFetchingNextPage);
 
-  if (isLoadingClients) {
+  if (isSessionLoading || isLoadingClients) {
     return <AllLoansPageSkeleton />;
+  }
+
+  if (isViewer) {
+    return <ViewerLoansPage />;
   }
 
   return (

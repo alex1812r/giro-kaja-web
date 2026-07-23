@@ -10,8 +10,10 @@ const PAGE_SIZE = 10;
 
 export type DebtsListInfiniteFilters = Pick<
   DebtsListParams,
-  "lender" | "nextPaymentDateFrom" | "nextPaymentDateTo"
->;
+  "currency" | "lender" | "nextPaymentDateFrom" | "nextPaymentDateTo"
+> & {
+  currency: string;
+};
 
 export function useDebtsListInfinite(filters: DebtsListInfiniteFilters) {
   return useInfiniteQuery({

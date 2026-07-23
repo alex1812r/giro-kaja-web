@@ -24,6 +24,7 @@ export type LoansOverview = {
 };
 
 export type LoansListParams = {
+  currency?: string;
   clientId?: string;
   nextPaymentDateFrom: string;
   nextPaymentDateTo: string;

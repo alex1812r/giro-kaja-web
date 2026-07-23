@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { ErrorState } from "@/shared/components/ErrorState";
+import { useCurrency } from "@/shared/currency";
 import { useDateRangeFilter } from "@/shared/date-range";
 
 import { useDebtsListInfinite } from "../hooks/useDebtsListInfinite";
@@ -15,16 +16,18 @@ import { AllDebtsListSkeleton } from "./components/AllDebtsListSkeleton";
 
 export function AllDebtsPage() {
   const { t } = useTranslation();
-  const dateRange = useDateRangeFilter("1m");
+  const { currency } = useCurrency();
+  const dateRange = useDateRangeFilter("1m", { direction: "future" });
   const [lenderQuery, setLenderQuery] = useState("");
 
   const filters = useMemo(
     () => ({
+      currency,
       lender: lenderQuery.trim() || undefined,
       nextPaymentDateFrom: dateRange.from,
       nextPaymentDateTo: dateRange.to,
     }),
-    [lenderQuery, dateRange.from, dateRange.to],
+    [currency, lenderQuery, dateRange.from, dateRange.to],
   );
 
   const {

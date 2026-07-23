@@ -30,6 +30,7 @@ export async function GET(request: Request) {
     }
 
     const data = await getLoansList({
+      currency: searchParams.get("currency") ?? undefined,
       clientId: searchParams.get("clientId") ?? undefined,
       nextPaymentDateFrom,
       nextPaymentDateTo,

@@ -3,9 +3,17 @@
 import { useCallback, useMemo, useState } from "react";
 
 import { resolveDateRange, toDateInputValue } from "./dateRangeUtils";
-import type { DateRangeFilterState, DateRangePreset } from "./types";
+import type { DateRangeDirection, DateRangeFilterState, DateRangePreset } from "./types";
 
-export function useDateRangeFilter(initialPreset: DateRangePreset = "1m") {
+type UseDateRangeFilterOptions = {
+  direction?: DateRangeDirection;
+};
+
+export function useDateRangeFilter(
+  initialPreset: DateRangePreset = "1m",
+  options: UseDateRangeFilterOptions = {},
+) {
+  const direction = options.direction ?? "past";
   const [preset, setPresetState] = useState<DateRangePreset>(initialPreset);
   const [customStart, setCustomStart] = useState("");
   const [customEnd, setCustomEnd] = useState("");
@@ -29,7 +37,10 @@ export function useDateRangeFilter(initialPreset: DateRangePreset = "1m") {
     [preset, customStart, customEnd],
   );
 
-  const range = useMemo(() => resolveDateRange(state), [state]);
+  const range = useMemo(
+    () => resolveDateRange(state, direction),
+    [state, direction],
+  );
 
   return {
     preset,
