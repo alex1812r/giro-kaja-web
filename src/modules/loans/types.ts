@@ -11,6 +11,7 @@ export type LoansSummaryMetrics = {
 export type LoanListItem = {
   id: string;
   clientName: string;
+  description: string | null;
   nextPaymentDate: string;
   interestRate: number;
   currentPrincipal: number;

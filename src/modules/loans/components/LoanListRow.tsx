@@ -44,13 +44,14 @@ export function LoanListRow({ item }: LoanListRowProps) {
   const isOverdue = item.status === "overdue";
   const isPaid = item.status === "paid";
   const DateIcon = isOverdue ? AlertTriangle : isPaid ? CheckCircle2 : Calendar;
+  const description = item.description?.trim() || null;
 
   return (
     <li>
       <Link
         href={`/loans/${item.id}`}
         className={cn(
-          "flex flex-col gap-3 px-4 py-3 transition-colors hover:bg-surface-muted md:flex-row md:items-center md:justify-between",
+          "flex flex-col gap-3 px-4 py-3 transition-colors hover:bg-surface-muted md:flex-row md:items-center md:justify-between md:gap-4",
           isPaid && "opacity-75 hover:opacity-100",
         )}
       >
@@ -62,8 +63,21 @@ export function LoanListRow({ item }: LoanListRowProps) {
             {getInitials(item.clientName)}
           </div>
           <div className="min-w-0">
-            <p className="truncate text-sm font-medium text-text-main">
-              {item.clientName}
+            <p
+              className="truncate text-sm text-text-main"
+              title={description ? `${item.clientName} | ${description}` : item.clientName}
+            >
+              <span className="font-medium">{item.clientName}</span>
+              {description ? (
+                <>
+                  <span className="mx-1.5 font-normal text-border" aria-hidden>
+                    |
+                  </span>
+                  <span className="font-normal text-text-secondary">
+                    {description}
+                  </span>
+                </>
+              ) : null}
             </p>
             <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-text-secondary">
               <span
@@ -84,7 +98,7 @@ export function LoanListRow({ item }: LoanListRowProps) {
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-4 md:justify-end">
+        <div className="flex shrink-0 items-center justify-between gap-4 md:justify-end">
           <span
             className={cn(
               "inline-flex items-center rounded px-2 py-0.5 text-xs font-medium",
@@ -95,7 +109,7 @@ export function LoanListRow({ item }: LoanListRowProps) {
           </span>
           <span
             className={cn(
-              "font-headline text-sm font-semibold",
+              "font-headline text-sm font-semibold tabular-nums",
               isPaid ? "text-text-secondary line-through" : "text-text-main",
             )}
           >

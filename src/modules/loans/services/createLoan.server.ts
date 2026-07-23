@@ -78,7 +78,7 @@ export async function createLoan(body: unknown): Promise<LoanListItem> {
       description,
     })
     .select(
-      "id, current_principal, interest_rate, currency, next_payment_date, status, clients(name, last_name)",
+      "id, current_principal, interest_rate, currency, next_payment_date, status, description, clients(name, last_name)",
     )
     .single();
 
@@ -94,6 +94,7 @@ export async function createLoan(body: unknown): Promise<LoanListItem> {
   return {
     id: data.id,
     clientName,
+    description: data.description?.trim() || null,
     nextPaymentDate: data.next_payment_date,
     interestRate: asNumber(data.interest_rate),
     currentPrincipal: asNumber(data.current_principal),

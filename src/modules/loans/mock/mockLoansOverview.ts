@@ -12,6 +12,7 @@ export const mockLoansOverview: LoansOverview = {
     {
       id: "l1",
       clientName: "Juan Pérez",
+      description: "Capital de trabajo para inventario del local",
       nextPaymentDate: "2023-10-15",
       interestRate: 5,
       currentPrincipal: 2_500,
@@ -21,6 +22,7 @@ export const mockLoansOverview: LoansOverview = {
     {
       id: "l2",
       clientName: "María García",
+      description: "Reparación de vehículo de trabajo",
       nextPaymentDate: "2023-10-10",
       interestRate: 8,
       currentPrincipal: 4_100,
@@ -30,6 +32,7 @@ export const mockLoansOverview: LoansOverview = {
     {
       id: "l3",
       clientName: "Carlos Ruiz",
+      description: null,
       nextPaymentDate: "2023-10-01",
       interestRate: 4.5,
       currentPrincipal: 1_200,

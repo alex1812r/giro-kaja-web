@@ -13,6 +13,7 @@ type LoanRow = {
   currency: string | null;
   next_payment_date: string;
   status: string;
+  description: string | null;
   clients:
     | { name: string; last_name: string | null }
     | { name: string; last_name: string | null }[]
@@ -81,7 +82,7 @@ export async function getLoansList(
   let query = supabase
     .from("loans")
     .select(
-      "id, current_principal, interest_rate, currency, next_payment_date, status, clients(name, last_name)",
+      "id, current_principal, interest_rate, currency, next_payment_date, status, description, clients(name, last_name)",
     )
     .eq("currency", currency)
     .gte("next_payment_date", params.nextPaymentDateFrom)
@@ -103,6 +104,7 @@ export async function getLoansList(
   const items: LoanListItem[] = rows.map((loan) => ({
     id: loan.id,
     clientName: clientName(loan.clients),
+    description: loan.description?.trim() || null,
     nextPaymentDate: loan.next_payment_date,
     interestRate: asNumber(loan.interest_rate),
     currentPrincipal: asNumber(loan.current_principal),
