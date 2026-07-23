@@ -17,6 +17,7 @@ import { LoanDetailHeader } from "./components/LoanDetailHeader";
 import { LoanDetailPageSkeleton } from "./components/LoanDetailPageSkeleton";
 import { LoanDetailStats } from "./components/LoanDetailStats";
 import { LoanPaymentsTable } from "./components/LoanPaymentsTable";
+import { LoanPortalLinkCard } from "./components/LoanPortalLinkCard";
 import { PaymentDetailModal } from "./components/PaymentDetailModal";
 import { RegisterPaymentModal } from "./components/RegisterPaymentModal";
 
@@ -99,6 +100,8 @@ export function LoanDetailsPage() {
           <p className="mt-1 text-sm text-text-main">{loan.description}</p>
         </section>
       ) : null}
+
+      {isOperator ? <LoanPortalLinkCard loanId={loan.id} /> : null}
 
       <LoanPaymentsTable
         payments={payments}

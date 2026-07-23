@@ -28,6 +28,11 @@ function isPublicPath(pathname: string) {
     return true;
   }
 
+  // Semi-public borrower portal: /p/{token}/{loanId}
+  if (pathname === "/p" || pathname.startsWith("/p/")) {
+    return true;
+  }
+
   return false;
 }
 
